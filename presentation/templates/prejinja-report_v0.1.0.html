@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Live Game Insight - Cpt Szumi</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --fg: #c9d1d9;
+      --accent: #58a6ff;
+      --highlight: #79c0ff;
+      --muted: #8b949e;
+      --strong: #2ea043;
+      --weak: #f85149;
+
+      --blue: #1f6feb;
+      --green: #238636;
+      --red: #da3633;
+    }
+
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+    }
+
+    h1, h2 {
+      color: var(--accent);
+    }
+
+    .section {
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      background-color: #161b22;
+    }
+
+    .header {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--highlight);
+    }
+
+    .subheader {
+      font-weight: bold;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: var(--highlight);
+    }
+
+    .power-comparison li {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.3rem;
+      align-items: baseline;
+    }
+
+    .level-label {
+      width: 7ch;
+      font-weight: bold;
+      color: var(--fg);
+      white-space: nowrap;
+    }
+
+    .power-icon {
+      width: 12ch;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .stronger { color: var(--strong); }
+    .weaker { color: var(--weak); }
+    .even { color: var(--muted); }
+
+    .comparison-table,
+    .cooldown-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .comparison-table th,
+    .comparison-table td,
+    .cooldown-table th,
+    .cooldown-table td {
+      border: 1px solid #30363d;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .comparison-table thead,
+    .cooldown-table thead {
+      background-color: #21262d;
+      color: var(--muted);
+    }
+
+    .comparison-table tbody tr:nth-child(even) {
+      background-color: #1a1f24;
+    }
+
+    .comparison-table tbody tr:nth-child(odd) {
+      background-color: #161b22;
+    }
+
+    .cooldown-table-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .cooldown-left,
+    .cooldown-right {
+  width: 42%;
+  padding-inline: 2rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+    .cooldown-left {
+  width: 42%;
+  padding-inline: 2rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+    .cooldown-right {
+  width: 42%;
+  padding-inline: 2rem;
+  text-align: center;
+}
+
+    .cooldown-vs {
+      width: 16%;
+      text-align: center;
+      font-weight: bold;
+      color: var(--muted);
+    }
+
+    .cooldown-box {
+  vertical-align: middle;
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      margin: 0.1rem 0.25rem;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      min-width: 2.5ch;
+      text-align: center;
+      color: #fff;
+    }
+
+    .cooldown-box.blue { background-color: var(--blue); }
+    .cooldown-box.green { background-color: var(--green); }
+    .cooldown-box.red { background-color: var(--red); }
+
+    .tip {
+      background-color: #21262d;
+      padding: 0.5rem;
+      border-left: 4px solid var(--accent);
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🔍 Live Game Report — Cpt Szumi</h1>
+
+  <div class="section">
+    <div class="header">🧩 Lane Matchup</div>
+    <div class="subheader">Aatrox vs. Darius</div>
+
+    <h2 class="subheader">Power Comparison</h2>
+    <ul class="power-comparison">
+      <li><span class="level-label">Level 1:</span><span class="power-icon weaker">⬇️ Weaker</span><span>Darius has stronger base stats and passive bleed</span></li>
+      <li><span class="level-label">Level 2:</span><span class="power-icon even">⚖️ Even</span><span>Both unlock second ability</span></li>
+      <li><span class="level-label">Level 3:</span><span class="power-icon stronger">⬆️ Stronger</span><span>Aatrox gets full combo with Q zoning</span></li>
+      <li><span class="level-label">Level 4:</span><span class="power-icon stronger">⬆️ Stronger</span><span>Aatrox gets full combo with Q zoning</span></li>
+      <li><span class="level-label">Level 5:</span><span class="power-icon even">⚖️ Even</span><span>Sustain vs. burst is balanced</span></li>
+      <li><span class="level-label">Level 6:</span><span class="power-icon stronger">⬆️ Stronger</span><span>Ult healing and synergy favors Aatrox</span></li>
+      <li><span class="level-label">Level 9:</span><span class="power-icon stronger">⬆️ Stronger</span><span>Q maxed, excellent poke and sustain</span></li>
+      <li><span class="level-label">Level 11:</span><span class="power-icon even">⚖️ Even</span><span>Both have strong 2nd ult power spike</span></li>
+      <li><span class="level-label">Level 13:</span><span class="power-icon weaker">⬇️ Weaker</span><span>Darius W fully maxed, heavy trade power</span></li>
+      <li><span class="level-label">Level 16:</span><span class="power-icon stronger">⬆️ Stronger</span><span>Aatrox scales better in extended fights</span></li>
+    </ul>
+
+    <h2 class="subheader">Champion Style Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr><th>Dimension</th><th>Aatrox (🟦)</th><th>Darius (🟥)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Sustain</td><td>High (Q healing, passive)</td><td>Medium (passive + D-shield)</td></tr>
+        <tr><td>Waveclear</td><td>Strong post-6, good Q zone</td><td>Average until Tiamat</td></tr>
+        <tr><td>Mana Demands</td><td>N/A (no resource)</td><td>Low</td></tr>
+        <tr><td>Preferred Trades</td><td>Extended fights (Q chains)</td><td>Short bursts (W + AA + E)</td></tr>
+        <tr><td>Roaming</td><td>Low</td><td>Low</td></tr>
+        <tr><td>All-in Threat</td><td>High at level 6+</td><td>High early & level 6</td></tr>
+      </tbody>
+    </table>
+    <div class="tip">🎯 Tip: Look to punish missed Darius E at level 3–4, and spike hard post-6 with R.</div>
+  </div>
+
+  <div class="section">
+    <div class="header">⏱️ Cooldowns per Ability Level</div>
+    <div class="cooldown-table-wrapper">
+      <table class="cooldown-table">
+        <thead>
+          <tr>
+            <th class="cooldown-left">Aatrox (🟦)</th>
+            <th class="cooldown-vs">vs</th>
+            <th class="cooldown-right">Darius (🟥)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="cooldown-left"><span class="cooldown-box blue">14</span><span class="cooldown-box green">12</span><span class="cooldown-box blue">10</span><span class="cooldown-box red">9</span><span class="cooldown-box red">7</span></td>
+            <td class="cooldown-vs">Q</td>
+            <td class="cooldown-right"><span class="cooldown-box blue">14</span><span class="cooldown-box red">13</span><span class="cooldown-box blue">10</span><span class="cooldown-box green">10</span><span class="cooldown-box green">9</span></td>
+          </tr>
+          <tr>
+            <td class="cooldown-left"><span class="cooldown-box red">26</span><span class="cooldown-box red">23</span><span class="cooldown-box red">20</span><span class="cooldown-box red">17</span><span class="cooldown-box red">14</span></td>
+            <td class="cooldown-vs">W</td>
+            <td class="cooldown-right"><span class="cooldown-box green">8</span><span class="cooldown-box green">7</span><span class="cooldown-box green">6</span><span class="cooldown-box green">5.5</span><span class="cooldown-box green">5</span></td>
+          </tr>
+          <tr>
+            <td class="cooldown-left"><span class="cooldown-box blue">9</span><span class="cooldown-box blue">8</span><span class="cooldown-box blue">7</span><span class="cooldown-box blue">6</span><span class="cooldown-box blue">5</span></td>
+            <td class="cooldown-vs">E</td>
+            <td class="cooldown-right"><span class="cooldown-box red">24</span><span class="cooldown-box red">21</span><span class="cooldown-box red">18</span><span class="cooldown-box red">15</span><span class="cooldown-box red">12</span></td>
+          </tr>
+          <tr>
+            <td class="cooldown-left"><span class="cooldown-box blue">120</span><span class="cooldown-box blue">100</span><span class="cooldown-box blue">80</span></td>
+            <td class="cooldown-vs">R</td>
+            <td class="cooldown-right"><span class="cooldown-box blue">120</span><span class="cooldown-box blue">100</span><span class="cooldown-box blue">80</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="header">🌲 Jungle Matchup</div>
+    <table class="comparison-table">
+      <thead>
+        <tr><th>Dimension</th><th>Lee Sin (🟦)</th><th>Jarvan IV (🟥)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Clear Speed</td><td>Fast early clear with sustain (W)</td><td>Average clear, strong AoE but less sustain</td></tr>
+        <tr><td>Gank Threat</td><td>High pre-6 with mobility + slow</td><td>Very high — level 2 ganks with EQ combo</td></tr>
+        <tr><td>1v1 Potential</td><td>Skill-based — strong early but risky if EQ missed</td><td>Strong early burst, wins vs squishies</td></tr>
+        <tr><td>2v2 Synergy (Top)</td><td>High synergy with Aatrox CC chaining</td><td>Moderate — burst damage, limited CC chain</td></tr>
+        <tr><td>Scaling</td><td>Falls off late, needs early lead</td><td>Utility scaling via ult engage</td></tr>
+        <tr><td>Utility / Setup</td><td>Kick disengage, early mobility</td><td>Reliable knockup engage with Cataclysm</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+RIOT_API_KEY = "RGAPI-346edde7-a5f7-479d-bb6c-77aa85a2ce70"
+RIOT_USERNAME = "Cpt Szumi"
+RIOT_TAGLINE = "EUNE"
+REGION = "euw1"
+REGIONAL_ROUTING = "europe"
