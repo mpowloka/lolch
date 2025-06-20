@@ -1,0 +1,77 @@
+Riot Games API Reference - Game & Champion Data for a Specified User
+====================================================================
+
+Base URLs:
+- General APIs: https://<region>.api.riotgames.com
+- Match Data: https://<regional-routing>.api.riotgames.com
+  - regional-routing: americas, europe, asia, etc.
+
+Authentication:
+- All endpoints require an API key via `X-Riot-Token` header.
+
+--------------------------------------------------------------------
+1. Account Information (account-v1)
+--------------------------------------------------------------------
+
+GET /riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}
+→ Get account info by Riot ID (returns puuid)
+
+GET /riot/account/v1/accounts/by-puuid/{puuid}
+→ Get Riot account info by puuid
+
+--------------------------------------------------------------------
+2. Match History & Details (match-v5)
+--------------------------------------------------------------------
+
+GET /lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=20
+→ Returns a list of recent match IDs for the user
+
+GET /lol/match/v5/matches/{matchId}
+→ Returns full match data: participants, champion IDs, stats, timeline
+
+--------------------------------------------------------------------
+3. Live Game Info (spectator-v5)
+--------------------------------------------------------------------
+
+WARNING: This is no mistake that endpoint name states "by-summoner", but the requires {puuid}. This is correct and shouldn't be replaced by any other summoner identifier.
+GET /lol/spectator/v5/active-games/by-summoner/{puuid}
+→ Returns current game info if user is in a match
+
+Note: This endpoint now uses PUUID directly.
+
+--------------------------------------------------------------------
+4. Champion Mastery (champion-mastery-v4)
+--------------------------------------------------------------------
+
+GET /lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}
+→ Returns mastery data for all champions for a user
+
+GET /lol/champion-mastery/v4/champion-masteries/by-summoner/{encryptedSummonerId}/by-champion/{championId}
+→ Mastery data for a specific champion
+
+--------------------------------------------------------------------
+5. Static Champion Info (champion-v3)
+--------------------------------------------------------------------
+
+GET /lol/platform/v3/champions
+→ Lists basic info about all champions (e.g., ID, name, status)
+
+--------------------------------------------------------------------
+Suggested Workflow
+--------------------------------------------------------------------
+
+1. Get PUUID:
+   - Use account-v1 to retrieve puuid using Riot ID
+
+2. Get Match List:
+   - Use match-v5 to fetch recent match IDs by puuid
+
+3. Get Match Details:
+   - Use match-v5 with match ID to fetch game data (champions, stats)
+
+4. Map Champion IDs:
+   - Use champion-v3 to resolve champion IDs to names
+
+5. Optional:
+   - Use spectator-v5 to get live match data (using puuid)
+   - Use champion-mastery-v4 to get user's champion experience (requires encryptedSummonerId)

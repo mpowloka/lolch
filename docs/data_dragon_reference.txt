@@ -1,0 +1,90 @@
+Data Dragon Reference - Static Game Data for League of Legends
+===============================================================
+
+Base URL:
+- https://ddragon.leagueoflegends.com
+
+Patch Versioning:
+- GET /api/versions.json
+  → Returns list of patch versions. Use the first one as the latest (e.g., "14.12.1").
+
+Localization:
+- Data is localized. Format: {LANG} such as en_US, pl_PL, etc.
+- Use in endpoint path: /cdn/{VERSION}/data/{LANG}/...
+
+--------------------------------------------------------------------
+1. Champion Data
+--------------------------------------------------------------------
+
+Champion List:
+  GET /cdn/{VERSION}/data/{LANG}/champion.json
+  → Summary of all champions (names, IDs, roles, etc.)
+
+Champion Details:
+  GET /cdn/{VERSION}/data/{LANG}/champion/{CHAMPION_NAME}.json
+  → Full details for one champion (spells, stats, lore)
+
+--------------------------------------------------------------------
+2. Summoner Spells
+--------------------------------------------------------------------
+
+  GET /cdn/{VERSION}/data/{LANG}/summoner.json
+  → Details about summoner spells (name, effects, cooldowns)
+
+--------------------------------------------------------------------
+3. Runes (Perks)
+--------------------------------------------------------------------
+
+  GET /cdn/{VERSION}/data/{LANG}/runesReforged.json
+  → Runes trees, slots, and bonuses (used in match analysis)
+
+--------------------------------------------------------------------
+4. Items
+--------------------------------------------------------------------
+
+  GET /cdn/{VERSION}/data/{LANG}/item.json
+  → All purchasable in-game items and attributes
+
+--------------------------------------------------------------------
+5. Map and Queue Metadata
+--------------------------------------------------------------------
+
+Map Data:
+  GET /cdn/{VERSION}/data/{LANG}/map.json
+  → Descriptions of different in-game maps
+
+Queue Types:
+  GET https://static.developer.riotgames.com/docs/lol/queues.json
+  → Queue metadata (e.g., Ranked Solo, ARAM)
+
+--------------------------------------------------------------------
+6. Profile Icons
+--------------------------------------------------------------------
+
+  GET /cdn/{VERSION}/data/{LANG}/profileicon.json
+  → All available player icons (ID to image mapping)
+
+--------------------------------------------------------------------
+7. Image Assets
+--------------------------------------------------------------------
+
+Champion Splash Art:
+  /cdn/img/champion/splash/{CHAMPION_NAME}_{SKIN_INDEX}.jpg
+
+Square Champion Icon:
+  /cdn/{VERSION}/img/champion/{CHAMPION_NAME}.png
+
+Passive Icon:
+  /cdn/{VERSION}/img/passive/{PASSIVE_IMAGE_NAME}.png
+
+Spell Icon:
+  /cdn/{VERSION}/img/spell/{SPELL_IMAGE_NAME}.png
+
+--------------------------------------------------------------------
+Usage Tips
+--------------------------------------------------------------------
+
+- Always fetch the latest patch version using /api/versions.json.
+- Cache static content locally during a patch version.
+- All asset URLs are case-sensitive.
+- Combine with Riot API (match-v5 etc.) to resolve IDs into readable data (champions, items, runes).
