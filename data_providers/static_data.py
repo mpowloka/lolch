@@ -26,7 +26,7 @@ class DataDragonClient(StaticDataProviderInterface):
         url = self._localized_url(f"champion/{champion_name}.json")
         response = requests.get(url)
         response.raise_for_status()
-        return response.json()
+        return response.json()["data"][champion_name]
 
     def get_spell_data(self) -> dict:
         url = self._localized_url("summoner.json")

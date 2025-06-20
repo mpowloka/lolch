@@ -9,7 +9,7 @@ from core.models.matchup import (
 from core.models.cooldowns import CooldownTable
 from core.models.threats import ThreatProjectionResult
 from core.models.report import FullMatchReport
-from presentation.renderer import HTMLReportRenderer
+from presentation.html_renderer import HTMLReportRenderer
 
 if __name__ == "__main__":
     report = FullMatchReport(
@@ -53,8 +53,7 @@ if __name__ == "__main__":
         )
     )
 
-    template_dir = Path("presentation/templates")
     output_path = Path("report_Teemo_vs_Garen.html")
-    renderer = HTMLReportRenderer(template_dir)
+    renderer = HTMLReportRenderer()
     renderer.render_html_report(report, output_path)
     print(f"✅ Report generated: {output_path}")

@@ -11,6 +11,16 @@ class RiotDataClientInterface(ABC):
     @abstractmethod
     def get_summoner_id(self, puuid: str) -> str: ...
 
+    @abstractmethod
+    def get_recent_match_ids(self, puuid: str, count: int = 1) -> list[str]: ...
+
+    @abstractmethod
+    def get_match_data(self, match_id: str) -> dict: ...
+
+    @abstractmethod
+    def extract_match_participant_summary(self, match_data: dict, puuid: str) -> dict: ...
+
+
 class StaticDataProviderInterface(ABC):
     @abstractmethod
     def get_champion_data(self, champion_name: str) -> dict: ...

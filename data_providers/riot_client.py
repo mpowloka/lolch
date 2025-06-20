@@ -42,3 +42,54 @@ class RiotAPIClient(RiotDataClientInterface):
             game_id=str(data["gameId"]),
             participants=participants
         )
+    
+    def get_recent_match_ids(self, puuid: str, count: int = 1) -> list[str]:
+        url = f"https://{self.region}.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count={count}"
+        response = requests.get(url, headers=self.headers)
+        response.raise_for_status()
+        return response.json()
+
+    def get_match_data(self, match_id: str) -> dict:
+        url = f"https://{self.region}.api.riotgames.com/lol/match/v5/matches/{match_id}"
+        response = requests.get(url, headers=self.headers)
+        response.raise_for_status()
+        return response.json()
+    
+    def extract_match_participant_summary(self, match_data: dict, puuid: str) -> dict:
+        participants = match_data["info"]["participants"]
+        user = next(p for p in participants if p["puuid"] == puuid)
+        user_team_id = user["teamId"]
+        user_role = user["teamPosition"]
+
+        # Find enemy laner in same role
+        enemy = next(
+            p for p in participants
+            if p["teamPosition"] == user_role and p["teamId"] != user_team_id
+        )
+
+        # Find junglers on both teams
+        ally_jungler = next(
+            p["championName"] for p in participants
+            if p["teamId"] == user_team_id and p["teamPosition"] == "JUNGLE"
+        )
+        enemy_jungler = next(
+            p["championName"] for p in participants
+            if p["teamId"] != user_team_id and p["teamPosition"] == "JUNGLE"
+        )
+
+        # Team compositions
+        blue_team = [p["championName"] for p in participants if p["teamId"] == 100]
+        red_team = [p["championName"] for p in participants if p["teamId"] == 200]
+        roles = {p["championName"]: p["teamPosition"] for p in participants}
+
+        return {
+            "user_champion": user["championName"],
+            "enemy_champion": enemy["championName"],
+            "ally_jungler": ally_jungler,
+            "enemy_jungler": enemy_jungler,
+            "blue_team": blue_team,
+            "red_team": red_team,
+            "roles": roles,
+            "summoner_name": user["summonerName"]
+        }
+
