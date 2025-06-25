@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Live Game Insight - {{ summoner_name }}</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --fg: #c9d1d9;
+      --accent: #58a6ff;
+      --highlight: #79c0ff;
+      --muted: #8b949e;
+      --strong: #2ea043;
+      --weak: #f85149;
+
+      --blue: #1f6feb;
+      --green: #238636;
+      --red: #da3633;
+    }
+
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+    }
+
+    h1, h2 {
+      color: var(--accent);
+    }
+
+    .section {
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      background-color: #161b22;
+    }
+
+    .header {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--highlight);
+    }
+
+    .subheader {
+      font-weight: bold;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: var(--highlight);
+    }
+
+    .power-comparison li {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.3rem;
+      align-items: baseline;
+    }
+
+    .level-label {
+      width: 7ch;
+      font-weight: bold;
+      color: var(--fg);
+      white-space: nowrap;
+    }
+
+    .power-icon {
+      width: 12ch;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .stronger { color: var(--strong); }
+    .weaker { color: var(--weak); }
+    .even { color: var(--muted); }
+
+    .comparison-table,
+    .cooldown-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .comparison-table th,
+    .comparison-table td,
+    .cooldown-table th,
+    .cooldown-table td {
+      border: 1px solid #30363d;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .comparison-table thead,
+    .cooldown-table thead {
+      background-color: #21262d;
+      color: var(--muted);
+    }
+
+    .comparison-table tbody tr:nth-child(even) {
+      background-color: #1a1f24;
+    }
+
+    .comparison-table tbody tr:nth-child(odd) {
+      background-color: #161b22;
+    }
+
+    .cooldown-table-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .cooldown-left,
+    .cooldown-right {
+      width: 42%;
+      padding-inline: 2rem;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .cooldown-vs {
+      width: 16%;
+      text-align: center;
+      font-weight: bold;
+      color: var(--muted);
+    }
+
+    .cooldown-box {
+      vertical-align: middle;
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      margin: 0.1rem 0.25rem;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      min-width: 2.5ch;
+      text-align: center;
+      color: #fff;
+    }
+
+    .cooldown-box.blue { background-color: var(--blue); }
+    .cooldown-box.green { background-color: var(--green); }
+    .cooldown-box.red { background-color: var(--red); }
+
+    .tip {
+      background-color: #21262d;
+      padding: 0.5rem;
+      border-left: 4px solid var(--accent);
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🔍 Live Game Report — {{ summoner_name }}</h1>
+
+  <div class="section">
+    <div class="header">🧩 Lane Matchup</div>
+    <div class="subheader">{{ lane.champion_1 }} vs. {{ lane.champion_2 }}</div>
+
+    <h2 class="subheader">Power Comparison</h2>
+    <ul class="power-comparison">
+      {% for entry in lane.power_levels %}
+        <li>
+          <span class="level-label">Level {{ entry.level }}:</span>
+          <span class="power-icon {{ entry.status.lower() }}">{{ icon_for_status(entry.status) }}</span>
+          <span>{{ entry.comment }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <h2 class="subheader">Champion Style Comparison</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr><th>Dimension</th><th>{{ lane.champion_1 }} (🟦)</th><th>{{ lane.champion_2 }} (🟥)</th></tr>
+      </thead>
+      <tbody>
+        {% for entry in lane.style_comparison %}
+          <tr><td>{{ entry.dimension }}</td><td>{{ entry.ally }}</td><td>{{ entry.enemy }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% for tip in lane.tips %}
+      <div class="tip">🎯 Tip: {{ tip }}</div>
+    {% endfor %}
+  </div>
+
+  <div class="section">
+    <div class="header">⏱️ Cooldowns per Ability Level</div>
+    <div class="cooldown-table-wrapper">
+      <table class="cooldown-table">
+        <thead>
+          <tr>
+            <th class="cooldown-left">{{ lane.champion_1 }} (🟦)</th>
+            <th class="cooldown-vs">vs</th>
+            <th class="cooldown-right">{{ lane.champion_2 }} (🟥)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for spell in ['Q', 'W', 'E', 'R'] %}
+          <tr>
+            <td class="cooldown-left">
+              {% for cd in cooldowns.spells[spell]['champion_1'] %}
+                <span class="cooldown-box">{{ cd }}</span>
+              {% endfor %}
+            </td>
+            <td class="cooldown-vs">{{ spell }}</td>
+            <td class="cooldown-right">
+              {% for cd in cooldowns.spells[spell]['champion_2'] %}
+                <span class="cooldown-box">{{ cd }}</span>
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="header">🌲 Jungle Matchup</div>
+    <table class="comparison-table">
+      <thead>
+        <tr><th>Dimension</th><th>{{ jungle.champion_1 }} (🟦)</th><th>{{ jungle.champion_2 }} (🟥)</th></tr>
+      </thead>
+      <tbody>
+        {% for entry in jungle.entries %}
+          <tr><td>{{ entry.dimension }}</td><td>{{ entry.ally }}</td><td>{{ entry.enemy }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="header">🔥 Mid-to-Late Game Threats</div>
+    <h2 class="subheader">Sidelane 1v1 Threats</h2>
+    <p>
+      {% for champ, comment in threats.sidelane_threats.items() %}
+        <strong>{{ champ }}</strong>: {{ comment }}<br>
+      {% endfor %}
+    </p>
+    <h2 class="subheader">Teamfight Threats</h2>
+    <p>
+      {% for champ, comment in threats.teamfight_threats.items() %}
+        <strong>{{ champ }}</strong>: {{ comment }}<br>
+      {% endfor %}
+    </p>
+  </div>
+</body>
+</html>
