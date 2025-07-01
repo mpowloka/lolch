@@ -1,0 +1,5 @@
+gameName:"Cpt Szumi"
+tagLine:"EUNE"
+region:"europe"
+server:"euw1"
+token:"RGAPI-34abca33-9b79-4688-8dbe-636c34b596b8"

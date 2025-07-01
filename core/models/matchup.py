@@ -1,30 +1,18 @@
 from pydantic import BaseModel
-from typing import Literal
-from typing import List
-
-class PowerLevelEntry(BaseModel):
-    level: int
-    status: Literal["Stronger", "Weaker", "Even"]
-    comment: str
-
-class StyleComparisonEntry(BaseModel):
-    dimension: str
-    ally: str
-    enemy: str
+from typing import Tuple, Dict, List
+from core.models.literals import Comparison, LaningDimension, Strength, JungleDimension
 
 class LaneMatchupReport(BaseModel):
-    champion_1: str
-    champion_2: str
-    power_levels: List[PowerLevelEntry]
-    style_comparison: List[StyleComparisonEntry]
-    tips: List[str] = []
-
-class JungleMatchupEntry(BaseModel):
-    dimension: str
-    ally: str
-    enemy: str
+    level_1: Tuple[Comparison, str]
+    level_2: Tuple[Comparison, str]
+    level_3: Tuple[Comparison, str]
+    level_4: Tuple[Comparison, str]
+    level_5: Tuple[Comparison, str]
+    level_6: Tuple[Comparison, str]
+    extra_spikes: Dict[int, Tuple[Comparison, str]]
+    analysis: Dict[LaningDimension, Tuple[Strength, Strength, str]]
+    extra_comments: List[str] = []
 
 class JungleMatchupReport(BaseModel):
-    champion_1: str
-    champion_2: str
-    entries: List[JungleMatchupEntry]
+    analysis: Dict[JungleDimension, Tuple[Strength, Strength, str]]
+    extra_comments: List[str] = []

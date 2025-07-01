@@ -1,0 +1,87 @@
+import pytest
+from data_providers._internal.cache import CDNCache
+from data_providers._internal.version_tracker import VersionTracker
+from data_providers._internal.http_client import HttpClient
+from data_providers._internal.config import get_headers, get_cdn_url
+from data_providers._internal.errors import RiotAPIError
+import time
+
+### CDNCache Tests ###
+def test_cache_set_and_get():
+    cache = CDNCache()
+    cache.set("champion.json", {"data": "x"})
+    assert cache.get("champion.json") == {"data": "x"}
+
+def test_cache_invalidate():
+    cache = CDNCache()
+    cache.set("champion.json", {"data": "x"})
+    cache.invalidate_all()
+    assert cache.get("champion.json") is None
+
+### VersionTracker Tests ###
+def test_version_set_and_get():
+    vt = VersionTracker()
+    vt.set_version("14.12.1")
+    assert vt.get_version() == "14.12.1"
+
+def test_version_changed_detection():
+    vt = VersionTracker()
+    vt.set_version("14.12.1")
+    assert vt.has_changed("14.12.2") is True
+    assert vt.has_changed("14.12.1") is False
+
+### Config Tests ###
+def test_headers_format():
+    headers = get_headers()
+    assert isinstance(headers, dict)
+    assert "X-Riot-Token" in headers
+
+def test_cdn_url_building():
+    url = get_cdn_url("14.12.1", "en_US", "champion.json")
+    assert url.startswith("https://ddragon.leagueoflegends.com")
+    assert "14.12.1" in url and "en_US" in url
+
+### HttpClient Tests ###
+def test_http_client_success(monkeypatch):
+    class MockResponse:
+        def __init__(self):
+            self.status_code = 200
+        def json(self):
+            return {"ping": "pong"}
+
+    def mock_get(*args, **kwargs):
+        return MockResponse()
+
+    monkeypatch.setattr("requests.get", mock_get)
+    client = HttpClient()
+    result = client.get("https://example.com")
+    assert result["ping"] == "pong"
+
+def test_http_client_retry(monkeypatch):
+    class FailFirst:
+        count = 0
+        def __call__(self, *args, **kwargs):
+            if self.count < 2:
+                self.count += 1
+                raise requests.exceptions.RequestException("fail")
+            return type("Resp", (), {"status_code": 200, "json": lambda: {"ok": True}})()
+
+    monkeypatch.setattr("requests.get", FailFirst())
+    client = HttpClient(max_retries=3)
+    result = client.get("https://retry-test.com")
+    assert result["ok"] is True
+
+def test_http_client_raises(monkeypatch):
+    class MockFail:
+        def __init__(self):
+            self.status_code = 500
+        def json(self):
+            return {}
+
+    def fail_get(*args, **kwargs):
+        return MockFail()
+
+    monkeypatch.setattr("requests.get", fail_get)
+    client = HttpClient()
+    with pytest.raises(RiotAPIError):
+        client.get("https://riot-api-fail.com")
