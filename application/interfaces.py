@@ -1,21 +1,33 @@
 from abc import ABC, abstractmethod
-from core.models import matchup, cooldowns, threats
-from core.models.raw_game_data import RawLiveGameData
-
+from core.models import (
+    GameData,
+    LaneMatchupReport,
+    JungleMatchupReport,
+    ThreatProjectionReport,
+    CooldownsComparisonReport,
+)
 
 class GameInsightAnalyzerInterface(ABC):
     @abstractmethod
-    def analyze_lane_matchup(self, user_champ: str, enemy_champ: str) -> matchup.LaneMatchupReport:
+    def start_insight_session(self) -> None:
         pass
 
     @abstractmethod
-    def analyze_jungle_matchup(self, ally_jg: str, enemy_jg: str) -> matchup.JungleMatchupReport:
+    def end_insight_session(self) -> None:
         pass
 
     @abstractmethod
-    def analyze_threats(self, full_game_data: RawLiveGameData) -> threats.ThreatProjectionResult:
+    def analyze_lane_matchup(self, game_data: GameData) -> LaneMatchupReport:
         pass
 
     @abstractmethod
-    def get_cooldown_table(self, champ1: str, champ2: str) -> cooldowns.CooldownTable:
+    def analyze_jungle_matchup(self, game_data: GameData) -> JungleMatchupReport:
+        pass
+
+    @abstractmethod
+    def analyze_threats(self, game_data: GameData) -> ThreatProjectionReport:
+        pass
+
+    @abstractmethod
+    def analyze_cooldowns(self, game_data: GameData) -> CooldownsComparisonReport:
         pass

@@ -463,6 +463,13 @@ class LLMAnalyzerInterface(ABC):
 
 ```python
 class GameInsightAnalyzerInterface(ABC):
+
+    def start_insight_session(self) -> None:
+        """Initialize any contextual memory or buffers."""
+
+    def end_insight_session(self) -> None:
+        """Tear down or finalize any context once analysis is done."""
+    
     def analyze_lane_matchup(self, game_data: GameData) -> LaneMatchupReport:
         """
         Analyze a lane matchup using structured game data.
