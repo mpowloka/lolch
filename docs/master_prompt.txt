@@ -15,23 +15,27 @@ Kolejność Działań:
 
 
 
-1. Assume the role of module coder as stated in Project Instructions. Your module is [NAME]
-- Read the latest lol_full_spec_with_models from project files and get very familiar with it. As your first task print all the interfaces you are about to implement and core models you will need to use for that.
-2. prepare a list of internal features you recommend and what are necessary. For example caching data, integration with external API, multithreading heavy workloads etc.
-2. From the features you suggested we will implement:
-- Caching Layer (Static CDN Assets)
--  Retry Logic + Backoff
-Prepare a files structure for what you need to implement. Consider all the main files, files with internal implementation that will not be shared outside and all other files like requirements, init, templates etc. Include acceptance tests in a single file and unit tests.
-3. Prepare a class diagram for module internal interractions.
-4. Open a canvas, and implement a set of acceptance tests for this module. These test should test the module interface without mocking any internals, to confirm it works correctly and can be integrated with other modules.
-5. Below, implement a set of unit tests for each class the module needs to work correctly.
-6. Below, implement module classes according to interfaces and tests.
+1. Assume the role of module coder as stated in Project Instructions. Your module is [NAME]. Read the latest lol_full_spec_with_models from project files and get very familiar with it. As your first task print all the interfaces you are about to implement and core models you will need to use for that.
 
-For each implemented file - analyze what other files use it in what context and present it in a table. Is every file, function and class used?
+2. Analyze the module requirements and prepare a list of internal features you recommend and what are necessary. For example caching data, integration with external API, multithreading heavy workloads etc.
 
-Access to the current state of the codebase at: https://github.com/mpowloka/lolch/tree/main/docs. Compare the module implementation there to what you implemented.
+3. From the features you suggested we will implement:
+- A
+- B
 
-Implement acceptance tests again.
+4. Prepare a files structure for what you need to implement. Consider all the main files, files with internal implementation that will not be shared outside and all other files like requirements, init, templates etc. Include acceptance tests.
+
+5. Prepare a class diagram for module internal interractions.
+
+6. Open a canvas, and implement a set of acceptance tests for this module. These test should test the module interface without mocking any internals, to confirm it works correctly and can be integrated with other modules.
+
+7. Below, implement module classes according to interfaces and tests.
+
+8. For each implemented file - analyze what other files use it in what context and present it in a table. Is every file, function and class used?
+
+9. Access to the current state of the codebase at: https://github.com/mpowloka/lolch/tree/main/docs. Compare the module implementation there to what you implemented.
+
+10. Implement acceptance tests again.
 
 
 
