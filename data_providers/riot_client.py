@@ -1,6 +1,7 @@
 from data_providers.interfaces import RiotApiClientInterface
 from data_providers._internal.config import REGION, SERVER, get_headers
 from data_providers._internal.http_client import HttpClient
+from urllib.parse import quote
 
 class RiotApiClient(RiotApiClientInterface):
     def __init__(self):
@@ -9,7 +10,9 @@ class RiotApiClient(RiotApiClientInterface):
         self.base_regional = f"https://{REGION}.api.riotgames.com"
 
     def get_puuid(self, game_name: str, tag_line: str) -> str:
-        url = f"{self.base_general}/riot/account/v1/accounts/by-riot-id/{game_name}/{tag_line}"
+        encoded_name = quote(game_name)
+        encoded_tag = quote(tag_line)
+        url = f"{self.base_regional}/riot/account/v1/accounts/by-riot-id/{encoded_name}/{encoded_tag}"
         return self.http.get(url, headers=get_headers())["puuid"]
 
     def get_active_game(self, puuid: str) -> dict:
