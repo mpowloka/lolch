@@ -5,7 +5,7 @@ from data_providers.riot_client import RiotAPIClient
 from data_providers.static_data import DataDragonClient
 from application.game_analyzer import GameInsightAnalyzer
 from presentation.html_renderer import HTMLReportRenderer
-from llm_analysis.mock_llm_analyzer import MockLLMAnalyzer
+from llm_analysis.mock_analyzer import MockLLMAnalyzer
 
 # Credentials and summoner info from `my user data.txt`
 RIOT_TOKEN = "RGAPI-e2126839-d146-4b52-a98d-13e483c1baca"
